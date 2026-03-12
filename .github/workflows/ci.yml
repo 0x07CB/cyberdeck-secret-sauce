@@ -1,0 +1,51 @@
+name: Shell Quality
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  shellcheck:
+    name: ShellCheck
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install ShellCheck
+        run: sudo apt-get install -y shellcheck
+
+      - name: Run ShellCheck
+        run: |
+          find . \
+            -not -path './.git/*' \
+            -name '*.sh' \
+            -print0 \
+          | xargs -0 shellcheck --severity=warning
+
+  shfmt:
+    name: shfmt
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install shfmt
+        run: |
+          SHFMT_VERSION="3.8.0"
+          mkdir -p "${HOME}/.local/bin"
+          curl -sSfL \
+            "https://github.com/mvdan/sh/releases/download/v${SHFMT_VERSION}/shfmt_v${SHFMT_VERSION}_linux_amd64" \
+            -o "${HOME}/.local/bin/shfmt"
+          chmod +x "${HOME}/.local/bin/shfmt"
+          echo "${HOME}/.local/bin" >> "${GITHUB_PATH}"
+
+      - name: Check formatting
+        run: |
+          find . \
+            -not -path './.git/*' \
+            -name '*.sh' \
+            -print0 \
+          | xargs -0 shfmt -d -i 2 -bn -ci
