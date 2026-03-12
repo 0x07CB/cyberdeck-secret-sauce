@@ -1,3 +1,26 @@
+# Environment / secrets
+.env
+*.env.local
+
+# Logs produced at runtime
+logs/
+*.log
+
+# Editor / OS artefacts
+.DS_Store
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# shfmt / shellcheck caches
+.shellcheck_cache/
+
+# ───────────────────────────────────────────────────
+# Legacy Python template entries kept for reference
+# ───────────────────────────────────────────────────
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]
